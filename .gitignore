@@ -1,0 +1,10 @@
+
+# dependances
+node_modules/
+package-lock.json
+
+# dotenv
+.env
+
+# dotfiles
+.DS_Store
