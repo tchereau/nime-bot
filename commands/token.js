@@ -1,7 +1,7 @@
 //const { getRandomInt } = require("../utils/random");
 import { getRandomInt } from "../utils/random.js";
 //const crypto = require('crypto');
-import cryto from "crypto";
+import crypto from "crypto";
 const makeid = (length) => {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -17,10 +17,10 @@ export const fakeToken = (argsBody) =>{
     let buffUserID = new Buffer.from(fakeUserID.toString());
     let fakeUserIDBase64 = buffUserID.toString('base64');
 
-    timestamp = Math.round(+new Date() / 1000) - 1293840000;
+    let timestamp = Math.round(+new Date() / 1000) - 1293840000;
 
     const digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
-    toB64 = x=>x.toString(2).split(/(?=(?:.{6})+(?!.))/g).map(v=>digit[parseInt(v,2)]).join("")
+    let toB64 = x=>x.toString(2).split(/(?=(?:.{6})+(?!.))/g).map(v=>digit[parseInt(v,2)]).join("")
     let fakeTimestampBase64 = toB64(timestamp)
     //console.log(fakeTimestampBase64)
     //console.log(fakeUserIDBase64)
@@ -38,10 +38,10 @@ export const fakeTokenLog = () =>{
     let buffUserID = new Buffer.from(fakeUserID.toString());
     let fakeUserIDBase64 = buffUserID.toString('base64');
 
-    timestamp = Math.round(+new Date() / 1000) - 1293840000;
+    let timestamp = Math.round(+new Date() / 1000) - 1293840000;
 
     const digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
-    toB64 = x=>x.toString(2).split(/(?=(?:.{6})+(?!.))/g).map(v=>digit[parseInt(v,2)]).join("")
+    let toB64 = x=>x.toString(2).split(/(?=(?:.{6})+(?!.))/g).map(v=>digit[parseInt(v,2)]).join("")
     let fakeTimestampBase64 = toB64(timestamp)
     //console.log(fakeTimestampBase64)
     //console.log(fakeUserIDBase64)
