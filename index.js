@@ -57,7 +57,10 @@ client.on("messageCreate", async function(message){
         logs.logsConsole(argsBody, false);
     } */
     message.channel.type === "DM" ? logs.logsConsole(argsBody, true) : logs.logsConsole(argsBody, false);
-    message.channel.type === "DM" ? logs.logsDiscord(argsBody,LogsChannel, true) : logs.logsDiscord(argsBody,LogsChannel, false);
+    if(process.env.LogsChannel){
+        message.channel.type === "DM" ? logs.logsDiscord(argsBody,LogsChannel, true) : logs.logsDiscord(argsBody,LogsChannel, false);
+    }
+    
     if(command === "duck"){
         commands.duck(argsBody);
         return
