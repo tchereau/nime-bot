@@ -32,7 +32,7 @@ client.on('ready', async () => {
 client.on("messageCreate", async function(message){
     //console.log(message.content);
     if(message.content === `<@${client.user.id}>`){
-        message.reply("je suis un bot, tape !!duck !!meteo !!pp !!gif !!clearchannel :)");
+        message.reply("je suis un bot, tape !!duck !!meteo !!pp !!gif :)");
         return;
     }
     // for fun with duck bot
@@ -74,7 +74,11 @@ client.on("messageCreate", async function(message){
         return;
     }
     if(command === "help"){
+        if(process.env.selfbot === 'true'){
         commands.help(argsBody);
+        return;
+        }
+        message.reply("je suis un bot, tape !!duck !!meteo !!pp !!gif :)");
         return;
     }
     if(command === "test"){

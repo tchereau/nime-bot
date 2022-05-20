@@ -4,7 +4,7 @@ const help = (argsBody) => {
         title: 'Liste des commandes',
         author: {
             name: argsBody.client.user.tag,
-            icon_url: client.user.avatarURL(),
+            icon_url: argsBody.client.user.avatarURL(),
         },
         description: `Me voici, je me nomme ${argsBody.client.user.tag}, je vous présentes les quelques commandes dont je suis capable :`,
         fields: [
@@ -40,7 +40,4 @@ const help = (argsBody) => {
 
     argsBody.message.channel.send({embeds: [embedAnswer]});
 }
-/* module.exports = {
-    help
-} */
 export default help
