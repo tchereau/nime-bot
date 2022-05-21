@@ -7,12 +7,12 @@ const geocoding = async (ville) => {
 };
 
 const openweathermap = async  (data) => {
-    console.log(data);
+    //console.log(data);
     let latitude = data[0].latitude;
     let longitude = data[0].longitude;
-    console.log(latitude + " " + longitude);
+    //console.log(latitude + " " + longitude);
     let weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${process.env.OPENWEATHERMAP_API_KEY}`).then(resultat => resultat.json());
-    console.log(weather);
+    //console.log(weather);
     return weather;
 };
 
@@ -25,22 +25,6 @@ const meteo = async (argsBody) => {
             let weather = await openweathermap(geocode);
             if (weather != undefined && weather.cod != "400"){
                 if(process.env.selfbot == "false"){
-/*                     let embed = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(`Météo de ${ville}`)
-                    .setDescription(`${weather.weather[0].description}`)
-                    .setThumbnail(`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`)
-                    .addFields(
-                        { name: 'Température', value: `${weather.main.temp}°C`, inline: true },
-                        { name: 'Humidité', value: `${weather.main.humidity}%`, inline: true },
-                        { name: 'Pression', value: `${weather.main.pressure}hPa`, inline: true },
-                        { name: 'Vent', value: `${weather.wind.speed}km/h`, inline: true },
-                        { name: 'Ressenti', value: `${weather.main.feels_like}°C`, inline: true },
-                        { name: 'Température min', value: `${weather.main.temp_min}°C`, inline: true },
-                        { name: 'Température max', value: `${weather.main.temp_max}°C`, inline: true },
-                    )
-                    .setTimestamp()
-                    .setFooter(`${argsBody.client.user.username} • Météo de  + ${ville} • source : openweathermap.org`); */
                     argsBody.message.channel.send({
                         embeds: [{
                         color: 0x0099ff,
@@ -72,7 +56,7 @@ const meteo = async (argsBody) => {
                     return;
                 }
                 argsBody.message.channel.send({
-                    content: `Météo sur ${ville} \n • descriptions: ${weather.weather[0].description} \n • Température : ${weather.main.temp}°C \n • Humidité: ${weather.main.humidity}% \n • Pression: ${weather.main.pressure}hPa \n • Vent: ${weather.wind.speed}km/h \n • Ressenti: ${weather.main.feels_like}°C \n • Température min: ${weather.main.temp_min}°C \n • Température max: ${weather.main.temp_max}°C \n`,
+                    content: `Météo sur ${weather.name} \n • descriptions: ${weather.weather[0].description} \n • Température : ${weather.main.temp}°C \n • Humidité: ${weather.main.humidity}% \n • Pression: ${weather.main.pressure}hPa \n • Vent: ${weather.wind.speed}km/h \n • Ressenti: ${weather.main.feels_like}°C \n • Température min: ${weather.main.temp_min}°C \n • Température max: ${weather.main.temp_max}°C \n`,
                     files: [{
                         attachment: `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`,
                         description: `${argsBody.client.user.tag} • source : openweathermap.org `,
