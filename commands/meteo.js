@@ -1,91 +1,90 @@
-//const http = require('http');
-import http from 'http';
-const meteo = (argsBody) => {
+
+import fetch from 'node-fetch';
+
+const geocoding = async (ville) => {
+    let geocode = await fetch(`https://positionstack.com/geo_api.php?query=${ville}`).then(resultat => resultat.json());
+    return geocode.data;
+};
+
+const openweathermap = async  (data) => {
+    console.log(data);
+    let latitude = data[0].latitude;
+    let longitude = data[0].longitude;
+    console.log(latitude + " " + longitude);
+    let weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${process.env.OPENWEATHERMAP_API_KEY}`).then(resultat => resultat.json());
+    console.log(weather);
+    return weather;
+};
+
+const meteo = async (argsBody) => {
     if (argsBody.args[0] != null){
         let ville = argsBody.args.join(' ');
-        http.get(`http://api.weatherstack.com/current?access_key=${process.env.meteoToken}&query=${ville}`, (resp) => {
-          let data = '';
-        
-          // A chunk of data has been received.
-          resp.on('data', (chunk) => {
-            data += chunk;
-          });
-        
-          // The whole response has been received. Print out the result.
-          resp.on('end', () => {
-            let res = JSON.parse(data);
-            //console.log(data);
-            if(res.error){
-                argsBody.message.reply("une erreur est survenue, vérifiez le nom de la ville, ou contactez le dev <@208246410661986304>");
-            }
-            else{
-            let now = new Date();
-            let heure   = ('0'+now.getHours()  ).slice(-2);
-            let minute  = ('0'+now.getMinutes()).slice(-2);
-
-            if(process.env.selfbot === 'false'){
-                let embedAnswer = {
-                    color: 0x0099ff,
-                    title: 'Météo sur ' + res.location.name,
-                    author: {
-                        name: 'Météo',
-                    },
-                    description: res.location.name + ' ' + res.location.region + ' ' + res.location.country + ' à ' + heure + ":" + minute,
-                    thumbnail: {
-                        url: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Weather_%28iOS%29.png',
-                    },
-                    fields: [
-                        {
-                            name: 'température',
-                            value: res.current.temperature + '°C',
-                            inline: true,
+        ville = ville.toLowerCase();
+        let geocode = await geocoding(ville);
+        if (geocode != undefined){
+            let weather = await openweathermap(geocode);
+            if (weather != undefined && weather.cod != "400"){
+                if(process.env.selfbot == "false"){
+/*                     let embed = new Discord.MessageEmbed()
+                    .setColor('#0099ff')
+                    .setTitle(`Météo de ${ville}`)
+                    .setDescription(`${weather.weather[0].description}`)
+                    .setThumbnail(`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`)
+                    .addFields(
+                        { name: 'Température', value: `${weather.main.temp}°C`, inline: true },
+                        { name: 'Humidité', value: `${weather.main.humidity}%`, inline: true },
+                        { name: 'Pression', value: `${weather.main.pressure}hPa`, inline: true },
+                        { name: 'Vent', value: `${weather.wind.speed}km/h`, inline: true },
+                        { name: 'Ressenti', value: `${weather.main.feels_like}°C`, inline: true },
+                        { name: 'Température min', value: `${weather.main.temp_min}°C`, inline: true },
+                        { name: 'Température max', value: `${weather.main.temp_max}°C`, inline: true },
+                    )
+                    .setTimestamp()
+                    .setFooter(`${argsBody.client.user.username} • Météo de  + ${ville} • source : openweathermap.org`); */
+                    argsBody.message.channel.send({
+                        embeds: [{
+                        color: 0x0099ff,
+                        title: `Météo de ${weather.name}`,
+                        author: {
+                            name: 'Météo',
                         },
-                        {
-                            name: 'vent',
-                            value: res.current.wind_speed + 'km/h en direction : ' + res.current.wind_dir,
-                            inline: true,
+                        description: `${weather.weather[0].description}`,
+                        thumbnail: {
+                            url: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Weather_%28iOS%29.png',
                         },
-                        {
-                            name: 'descriptions',
-                            value: res.current.weather_descriptions[0],
-                            inline: true,
+                        fields: [
+                            { name: 'Température', value: `${weather.main.temp}°C`, inline: true },
+                            { name: 'Humidité', value: `${weather.main.humidity}%`, inline: true },
+                            { name: 'Pression', value: `${weather.main.pressure}hPa`, inline: true },
+                            { name: 'Vent', value: `${weather.wind.speed}km/h`, inline: true },
+                            { name: 'Ressenti', value: `${weather.main.feels_like}°C`, inline: true },
+                            { name: 'Température min', value: `${weather.main.temp_min}°C`, inline: true },
+                            { name: 'Température max', value: `${weather.main.temp_max}°C`, inline: true },
+                        ],
+                        image: {
+                            url: `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`,
                         },
-                    ],
-                    image: {
-                        url: res.current.weather_icons[0],
-                    },
-                    timestamp: new Date(),
-                    footer: {
-                        text: `${argsBody.client.user.username} • source : weatherstack.com`,
-                    },
-                };
-
-                argsBody.message.channel.send({embeds: [embedAnswer]});
+                        timestamp: new Date(),
+                        footer: {
+                            text: `${argsBody.client.user.username} • Météo de ${ville} • source : openweathermap.org`,
+                        },
+                        }],});
+                    return;
+                }
+                argsBody.message.channel.send({
+                    content: `Météo sur ${ville} \n • descriptions: ${weather.weather[0].description} \n • Température : ${weather.main.temp}°C \n • Humidité: ${weather.main.humidity}% \n • Pression: ${weather.main.pressure}hPa \n • Vent: ${weather.wind.speed}km/h \n • Ressenti: ${weather.main.feels_like}°C \n • Température min: ${weather.main.temp_min}°C \n • Température max: ${weather.main.temp_max}°C \n`,
+                    files: [{
+                        attachment: `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`,
+                        description: `${argsBody.client.user.tag} • source : openweathermap.org `,
+                    }]
+                    }).catch(console.error);
                 return;
             }
-            argsBody.message.channel.send({
-                content: `Météo sur ${res.location.name} \n • température: ${res.current.temperature}°C \n • vent: ${res.current.wind_speed}km/h en direction ${res.current.wind_dir} \n • descriptions: ${res.current.weather_descriptions[0]}`,
-                files: [{
-                  attachment: res.current.weather_icons[0],
-                  description: `${argsBody.client.user.tag} • source : weatherstack.com ` + res.location.name + ' ' + res.location.region + ' ' + res.location.country + ' à ' + heure + ":" + minute
-                }]
-              }).catch(console.error);
-            }
-
-          }); 
-        
-        }).on("error", (err) => {
-          console.log("Error: " + err.message);
-        });
-
-        
+        }
     }
     else{
-        argsBody.message.reply(`Entrez une ville après ${argsBody.prefix}meteo`);
+        argsBody.message.reply("Vous devez préciser une ville");
     }
 };
 
-/* module.exports = {
-    meteo
-} */
 export default meteo;
