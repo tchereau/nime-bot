@@ -59,7 +59,7 @@ const meteo = async (argsBody) => {
                     content: `Météo sur ${weather.name} \n • descriptions: ${weather.weather[0].description} \n • Température : ${weather.main.temp}°C \n • Humidité: ${weather.main.humidity}% \n • Pression: ${weather.main.pressure}hPa \n • Vent: ${weather.wind.speed}km/h \n • Ressenti: ${weather.main.feels_like}°C \n • Température min: ${weather.main.temp_min}°C \n • Température max: ${weather.main.temp_max}°C \n`,
                     files: [{
                         attachment: `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`,
-                        description: `${argsBody.client.user.tag} • Météo de ${geocode[0].name} ${geocode[0].region} ${geocode[0].country} • source : openweathermap.org `,
+                        description: `${argsBody.client.user.tag} • Météo de ${weather.name} ${geocode[0].region} ${geocode[0].country} • source : openweathermap.org `,
                     }]
                     }).catch(console.error);
                 return;
