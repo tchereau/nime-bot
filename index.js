@@ -36,9 +36,11 @@ client.on("messageCreate", async function(message){
         return;
     }
     // for fun with duck bot
-    if(message.content.includes('<:kamikaze:977021468439371787>' && process.env.selfbot)){
+    if(message.content.includes(':kamikaze:') && process.env.selfbot === "true"){
         message.channel.send("!pan");
     }
+    //uncomment this if you want to be the only one to use the bot and add your id
+    //if(message.author.id != "208246410661986304"){ return; }
 
     if (!message.content.startsWith(prefix)){
         return;
