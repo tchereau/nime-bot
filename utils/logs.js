@@ -22,7 +22,7 @@ export const logsDiscord = (argsBody,LogsChannel, mp) => {
         return;
     }
     LogsChannel.send({
-        content: `${mp ? `Message privé <@${argsBody.message.author.id}> `: ` Message public <@${argsBody.message.author.id}>` } : ${argsBody.prefix + argsBody.command + ' ' + argsBody.args.join(' ')}`,
+        content: `${mp ? `Message privé <@${argsBody.message.author.id}>`: `Message public <@${argsBody.message.author.id}>` } : ${argsBody.prefix + argsBody.command + ' ' + argsBody.args.join(' ')}`,
         files: [{
             attachment: argsBody.message.author.avatarURL(),
             description: `${argsBody.client.user.tag}• log`
@@ -39,7 +39,7 @@ export const logsConsole = (argsBody, mp) => {
     let heure   = ('0'+now.getHours()  ).slice(-2);
     let minute  = ('0'+now.getMinutes()).slice(-2);
     let seconde = ('0'+now.getSeconds()).slice(-2);
-    console.log(`════════════════════════ \n ${heure}:${minute}:${seconde} ${jour}/${mois}/${annee} \n ${mp ? 'mp '+argsBody.message.author.username : argsBody.message.author.username } <@${argsBody.message.author.id}> : ${argsBody.prefix + argsBody.command + ' ' + argsBody.args.join(' ')}`)
+    console.log(`════════════════════════ \n ${heure}:${minute}:${seconde} ${jour}/${mois}/${annee} \n ${mp ? `\x1b[31mMessage privé\x1b[0m \x1b[1m\x1b[36m${argsBody.message.author.username}\x1b[0m`: `\x1b[32mMessage public \x1b[1m\x1b[36m${argsBody.message.author.username}\x1b[0m`} <@${argsBody.message.author.id}>: ${argsBody.prefix + argsBody.command + ' ' + argsBody.args.join(' ')}`)
 }
 //module.exports = { logsDiscord, logsConsole }
 /* export default { logsDiscord, logsConsole } */

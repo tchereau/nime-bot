@@ -6,7 +6,7 @@ import commands from './utils/importCommands.js';
 import *as logs from './utils/logs.js';
 
 //we return into the console the kind of client
-process.env.selfbot === 'true' ? console.log("selfbot") : console.log("bot");
+process.env.selfbot === 'true' ? console.log("\x1b[31mselfbot\x1b[0m") : console.log("\x1b[31mbot\x1b[0m");
 
 //we create the client
 const client = process.env.selfbot === 'true' ? new SelfBotClient.Client() : new BotClient.Client({intents: ["GUILDS", "GUILD_MESSAGES", 'GUILD_PRESENCES', 'GUILD_MEMBERS','DIRECT_MESSAGES'], partials: ['CHANNEL']});;
@@ -17,8 +17,8 @@ let LogsChannel;
 
 //bot connecté
 client.on('ready', async () => {
-    console.log(`${client.user.username} is ready!`);
-    console.log(client.user.id);
+    console.log(`\x1b[32mConnecté\x1b[0m sous \x1b[1m\x1b[36m${client.user.username}\x1b[0m`);
+    console.log(`ID: \x1b[1m\x1b[36m${client.user.id}\x1b[0m`);
     client.user.setStatus('dnd');
     client.user.setActivity(process.env.selfbot ? "selfbot" : "bot")
     /* client.user.setActivity('activity', { type: 'WATCHING' });
@@ -50,14 +50,6 @@ client.on("messageCreate", async function(message){
     const command = args.shift().toLowerCase();
     const argsBody= { message, client, args, prefix, command};
 
-    //log
-/*     if(message.channel.type === "DM"){
-        //console.log(message.channel.type);
-        logs.logsConsole(argsBody, true);
-    }else{
-        //console.log(message.channel.type);
-        logs.logsConsole(argsBody, false);
-    } */
     message.channel.type === "DM" ? logs.logsConsole(argsBody, true) : logs.logsConsole(argsBody, false);
     if(process.env.LogsChannel){
         message.channel.type === "DM" ? logs.logsDiscord(argsBody,LogsChannel, true) : logs.logsDiscord(argsBody,LogsChannel, false);
