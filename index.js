@@ -60,42 +60,39 @@ client.on("messageCreate", async function(message){
     if(process.env.LogsChannel){
         message.channel.type === "DM" ? logs.logsDiscord(argsBody,LogsChannel, true) : logs.logsDiscord(argsBody,LogsChannel, false);
     }
-    
-    if(command === "duck"){
-        commands.duck(argsBody);
-        return
-    }
-    if(command === "clearchannel" || command === "cleanchannel"){
-        commands.clearchannel(argsBody);
-        return;
-    }
-    if(command === "pp"){
-        commands.pp(argsBody);
-        return;
-    }
-    if(command === "help"){
-        if(process.env.selfbot === 'true'){
-        commands.help(argsBody);
-        return;
-        }
-        message.reply("je suis un bot, tape !!duck !!meteo !!pp !!gif :)");
-        return;
-    }
-    if(command === "test"){
-        commands.test(argsBody);
-        return;
-    }
-    if(command === "meteo"){
-        commands.meteo(argsBody);
-        return;
-    }
-    if(command === "gif"){
-        commands.gif(argsBody);
-        return;
-    }
-    if(command === "token"){
-        commands.token.fakeToken(argsBody);
-        return;
+
+    switch(command){
+        case "duck":
+            commands.duck(argsBody);
+            break;
+        case "clearchannel":
+            commands.clearchannel(argsBody);
+            break;
+        case "pp":
+            commands.pp(argsBody);
+            break;
+        case "help":
+            if(process.env.selfbot === 'false'){
+                commands.help(argsBody);
+                break;
+            }
+            message.reply("je suis un bot, tape !!duck !!meteo !!pp !!gif :)");
+            break;
+        case "test":
+            commands.test(argsBody);
+            break;
+        case "meteo":
+            commands.meteo(argsBody);
+            break;
+        case "gif":
+            commands.gif(argsBody);
+            break;
+        case "token":
+            commands.token.fakeToken(argsBody);
+            break;
+        default:
+            message.reply("je ne connais pas cette commande");
+            break;
     }
 });
 
