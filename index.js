@@ -39,6 +39,9 @@ client.on("messageCreate", async function(message){
     if(message.content.includes(':kamikaze:') && process.env.selfbot === "true"){
         message.channel.send("!pan");
     }
+    if(message.content.includes('fantôme') || message.content.includes(':baby_chick:') && process.env.selfbot === "true"){
+        message.channel.send("!hug");
+    }
     //uncomment this if you want to be the only one to use the bot and add your id
     //if(message.author.id != "208246410661986304"){ return; }
 
